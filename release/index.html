@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Immaterial-design-ripple</title>
+  <script src="immaterial-design-ripple.min.js"></script>
+  <script>ImdRipple.bindOnLoad('.imd-ripple')</script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,500" rel="stylesheet" type="text/css">
+  <style>
+  html,body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+  html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+
+  body,button{
+    font-family: Roboto;
+  }
+
+  body{
+    line-height: 1;
+  }
+  article{
+    background: rgba(0,0,0,.1);
+
+    min-height: 100vh;
+    padding: 1rem;
+  }
+  article h1{
+    font-size: 800%;
+    margin-left: -4rem;
+    margin-bottom: 2rem;
+  }
+  article h2{
+    font-size: 300%;
+    margin: 1rem 0;
+  }
+  article h3{
+    font-size: 200%;
+    margin: 1rem 0;
+    margin-top: 3rem;
+  }
+  article section{
+    margin: 1rem 4rem;
+  }
+
+  button{
+    margin: 0;
+    margin-bottom: .1em;
+    border: 0;
+
+    min-width: 8em;
+    
+    font-size: xx-large;
+  }
+  button img{
+    height: 1.2em;
+    margin-left: .25em;
+    vertical-align: middle;
+  }
+
+  footer{
+    text-align: right;
+  }
+  </style>
+</head>
+<body>
+
+  <a href="https://github.com/immaterial-design/immaterial-design-ripple"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+  
+  <div id="background" style="z-index:-1;position:fixed;top:0;right:0;bottom:0;left:0;"></div>
+  <article>
+    <section>
+      <h1 class="imd-ripple">Imd-Ripple</h1>
+    </section>
+
+    <section>
+      <h2>Use <code>imd-options</code> attribute</h2>
+      <button class="imd-ripple">👇Default effect</button>
+      
+      <h3>{pixelSize:number}</h3>
+      <button class="imd-ripple" imd-options="">auto</button>
+      <button class="imd-ripple" imd-options="{pixelSize:1}">1</button>
+      <button class="imd-ripple" imd-options="{pixelSize:10}">10</button>
+
+      <h3>{bitCrash:number}</h3>
+      <button class="imd-ripple" imd-options="{bitCrash:7}">7</button>
+      <button class="imd-ripple" imd-options="{bitCrash:1,pixelSize:1}">1</button>
+      <button class="imd-ripple" imd-options="{bitCrash:30}">30</button>
+
+      <h3>{color:'color-name'}</h3>
+      <button class="imd-ripple" imd-options="{color:'rgba(0,0,0,.3)'}">rgba(0,0,0,.3)</button>
+      <button class="imd-ripple" imd-options="{color:'black'}">black</button>
+      <button class="imd-ripple" imd-options="{color:'white'}">white</button>
+
+      <h3>{timingFunction:name}(use <a href="https://github.com/rdy/easing-js/blob/master/src/easing.js">easing.js</a>)</h3>
+      <button class="imd-ripple" imd-options="{timingFunction:'easeInBack'}">easeInBack</button>
+      <button class="imd-ripple" imd-options="{timingFunction:'easeInOutExpo'}">easeInOutExpo</button>
+      <button class="imd-ripple" imd-options="{timingFunction:'easeInCirc'}">easeInCirc</button>
+    </section>
+
+    <footer>
+      <a href="http://59naga.mit-license.org/">MIT ©2016 59naga</a>
+    </footer>
+  </article>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+{
+  "name": "immaterial-design-ripple",
+  "version": "0.0.0",
+  "description": "HTML5 Canvas based pixelated ripple effect",
+  "scripts": {
+    "start": "karma start",
+    "test": "karma start && npm run lint",
+    "test-cloud": "karma start",
+    "lint": "eslint src test webpack.config.babel.js",
+    "prepublish": "node -e \"if(process.env.TRAVIS_PASSED){}else{process.exit(1)}\" && npm-run-all --parallel compile release esdoc || echo skip prepublish",
+    "compile": "babel -V && babel src --out-dir lib",
+    "release": "webpack",
+    "esdoc": "esdoc -c esdoc.json"
+  },
+  "main": "lib",
+  "files": [
+    "lib",
+    "release",
+    "esdoc"
+  ],
+  "browser": "release/immaterial-design-ripple.min.js",
+  "dependencies": {
+    "bluebird": "^3.3.3",
+    "easing-js": "^1.0.1",
+    "json5": "^0.4.0",
+    "object-assign": "^4.0.1"
+  },
+  "devDependencies": {
+    "abigail": "^0.1.2",
+    "babel-eslint": "^5.0.0",
+    "babel-loader": "^6.2.2",
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "babel-plugin-espower": "^2.1.2",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-stage-2": "^6.5.0",
+    "compression-webpack-plugin": "^0.2.0",
+    "esdoc": "^0.4.5",
+    "eslint": "^2.2.0",
+    "eslint-config-airbnb": "^6.0.2",
+    "eslint-plugin-mocha": "^2.0.0",
+    "eslint-plugin-react": "^4.0.0",
+    "isparta-loader": "^2.0.0",
+    "json-loader": "^0.5.4",
+    "karma": "^0.13.21",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-coverage": "^0.5.3",
+    "karma-mocha": "^0.2.2",
+    "karma-mocha-reporter": "^1.2.2",
+    "karma-sauce-launcher": "^0.3.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^1.7.0",
+    "mocha": "^2.4.5",
+    "npm-run-all": "^1.5.1",
+    "power-assert": "^1.2.0",
+    "simulant": "^0.2.0",
+    "webpack": "^1.12.13",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "keywords": [
+    "material-design",
+    "ripple-effect",
+    "pixelart"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/immaterial-design/immaterial-design-ripple.git"
+  },
+  "bugs": {
+    "url": "https://github.com/immaterial-design/immaterial-design-ripple/issues"
+  },
+  "homepage": "https://github.com/immaterial-design/immaterial-design-ripple#readme",
+  "author": "59naga <i59naga@icloud.com> (http://berabou.me)",
+  "license": "MIT"
+}
