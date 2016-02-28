@@ -34,6 +34,7 @@ var init = {
 
   colors: true,
   browsers: ['Chrome'],
+
   frameworks: ['mocha'],
   client: {
     mocha: {
@@ -43,6 +44,7 @@ var init = {
   reporters: ['mocha'],
 
   plugins: [
+    'karma-phantomjs-launcher',
     'karma-chrome-launcher',
     'karma-sauce-launcher',
     'karma-mocha',
@@ -57,6 +59,12 @@ var init = {
 
 switch (process.env.npm_lifecycle_event) {
   case 'test':
+    if (process.env.TRAVIS) {
+      init.browsers = ['PhantomJS'];
+      init.phantomjsLauncher = {
+        exitOnResourceError: true,
+      };
+    }
     init.singleRun = true;
     init.webpack.module.loaders.push({
       test: /\.js$/,
@@ -114,7 +122,7 @@ switch (process.env.npm_lifecycle_event) {
       recordScreenshots: true,
       testName: packageJson.name,
     };
-    init.browserNoActivityTimeout = 1000000;
+    init.browserNoActivityTimeout = 100000;
     break;
 }
 
