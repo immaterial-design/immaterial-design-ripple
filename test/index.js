@@ -52,7 +52,7 @@ describe('ImdRipple', () => {
 
   describe('.play', () => {
     it('インスタンスを生成しなくても波形アニメーションは再生できる', () => {
-      const promise = ImdRipple.play(50, 50, 100, 100);
+      const promise = ImdRipple.play(25, 25, 50, 50);
       const canvas = promise.context.canvas;
 
       document.body.appendChild(canvas);
@@ -62,7 +62,7 @@ describe('ImdRipple', () => {
     });
     it('波形の粒の大きさの変更', () => {
       const options = { pixelSize: 3 };
-      const promise = ImdRipple.play(50, 50, 100, 100, options);
+      const promise = ImdRipple.play(25, 25, 50, 50, options);
       const canvas = promise.context.canvas;
 
       document.body.appendChild(canvas);
@@ -72,7 +72,7 @@ describe('ImdRipple', () => {
     });
     it('波形をなめらかにする', () => {
       const options = { pixelSize: 1, bitCrash: 1 };
-      const promise = ImdRipple.play(50, 50, 100, 100, options);
+      const promise = ImdRipple.play(25, 25, 50, 50, options);
       const canvas = promise.context.canvas;
 
       document.body.appendChild(canvas);
@@ -82,7 +82,7 @@ describe('ImdRipple', () => {
     });
     it('波形の色を変更する', () => {
       const options = { pixelSize: 1, bitCrash: 1, color: 'aliceblue' };
-      const promise = ImdRipple.play(50, 50, 100, 100, options);
+      const promise = ImdRipple.play(25, 25, 50, 50, options);
       const canvas = promise.context.canvas;
 
       document.body.appendChild(canvas);

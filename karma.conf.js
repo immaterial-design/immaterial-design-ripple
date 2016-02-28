@@ -22,6 +22,7 @@ var init = {
     devtool: 'inline-source-map',
   },
   webpackMiddleware: {
+    quiet: true,
     noInfo: true,
   },
 

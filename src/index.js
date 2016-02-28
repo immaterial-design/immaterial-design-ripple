@@ -104,10 +104,9 @@ export default class ImdRipple extends EventEmitter {
       autoDestroy: true,
     }, JSON5.parse(this.element.getAttribute('imd-options') || '{}'), options);
 
-    // FIXME: 端数が入るとアニメーションがおかしくなる
     const { width, height } = this.element.getBoundingClientRect();
-    const playX = x || width / 2;
-    const playY = y || height / 2;
+    const playX = x === undefined ? Math.floor(width / 2) : x;
+    const playY = y === undefined ? Math.floor(height / 2) : y;
 
     const promise = ImdRipple.play(playX, playY, width, height, opts);
     const canvas = promise.context.canvas;
