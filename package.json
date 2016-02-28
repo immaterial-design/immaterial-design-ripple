@@ -1,6 +1,6 @@
 {
   "name": "immaterial-design-ripple",
-  "version": "0.0.0",
+  "version": "0.0.0-beta",
   "description": "HTML5 Canvas based pixelated ripple effect",
   "scripts": {
     "start": "karma start",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "abigail": "^0.1.2",
+    "babel-cli": "^6.5.1",
     "babel-eslint": "^5.0.0",
     "babel-loader": "^6.2.2",
     "babel-plugin-add-module-exports": "^0.1.2",
