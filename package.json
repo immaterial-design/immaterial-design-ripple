@@ -1,6 +1,6 @@
 {
   "name": "immaterial-design-ripple",
-  "version": "0.0.0-beta.1",
+  "version": "0.0.1",
   "description": "HTML5 Canvas based pixelated ripple effect",
   "scripts": {
     "start": "karma start",
@@ -12,7 +12,7 @@
     "release": "webpack",
     "esdoc": "esdoc -c esdoc.json && rm esdoc/package.json"
   },
-  "main": "lib",
+  "main": "lib/index.js",
   "files": [
     "lib",
     "release",

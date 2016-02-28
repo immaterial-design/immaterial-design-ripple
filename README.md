@@ -11,8 +11,8 @@ Immaterial Design Ripple (beta)
   <a href="https://coveralls.io/github/immaterial-design/immaterial-design-ripple/coverage">
     <img src="https://img.shields.io/coveralls/immaterial-design/immaterial-design-ripple/master.svg?style=flat-square">
   </a>
-  <a href="https://npmcdn.com/immaterial-design-ripple@0.0.0-beta.1/esdoc/">
-    <img src="https://npmcdn.com/immaterial-design-ripple@0.0.0-beta.1/esdoc/badge.svg">
+  <a href="https://npmcdn.com/immaterial-design-ripple@0.0.1/esdoc/index.html">
+    <img src="https://npmcdn.com/immaterial-design-ripple@0.0.1/esdoc/badge.svg">
   </a>
 </p>
 
@@ -24,12 +24,12 @@ Immaterial Design Ripple (beta)
 
 > HTML5 Canvas based pixelated ripple effect.
 
-[See Example](https://npmcdn.com/immaterial-design-ripple@0.0.0-beta.1/release/)
+[See Example](https://npmcdn.com/immaterial-design-ripple@0.0.1/release/index.html)
 
 Installation
 ---
 
-# At NodeJS
+## At NodeJS
 
 ```bash
 $ npm install immaterial-design-ripple --save
@@ -40,10 +40,10 @@ import ImdRipple from 'immaterial-design-ripple';
 ImdRipple.bindOnLoad('.imd-ripple');
 ```
 
-# At CDN
+## At CDN
 
 ```html
-<script src="https://npmcdn.com/immaterial-design-ripple@0.0.0-beta.1/release/immaterial-design-ripple.min.js"></script>
+<script src="https://npmcdn.com/immaterial-design-ripple@0.0.1/release/immaterial-design-ripple.min.js"></script>
 
 <button class="imd-ripple">Default effect</button>
 <script>ImdRipple.bindOnLoad('.imd-ripple')</script>
@@ -52,9 +52,10 @@ ImdRipple.bindOnLoad('.imd-ripple');
 Usage
 ---
 
-# `ImdRipple.bindOnLoad(selector, options = {})`
+## `ImdRipple.bindOnLoad(selector, options = {})`
 
 Bind a left-click event automatically to the elements of the `selector` After window onload.
+
 If specify the `options` then set default of the ripple effect.
 
 ```html
@@ -68,13 +69,13 @@ ImdRipple.bindOnLoad('body', {
 </script>
 ```
 
-becomes
+Becomes :+1:
 
 ![result](https://cloud.githubusercontent.com/assets/1548478/13376399/8a6f610e-ddfe-11e5-9f39-364c869ed841.gif)
 
 Document
 ---
-[API Reference(日本語)](https://npmcdn.com/immaterial-design-ripple@0.0.0-beta.1/esdoc/)
+[API Reference(日本語)](https://npmcdn.com/immaterial-design-ripple@0.0.1/esdoc/index.html)
 
 Test
 ---
