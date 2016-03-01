@@ -1,5 +1,4 @@
 import webpack from 'webpack';
-import Compression from 'compression-webpack-plugin';
 
 const config = {
   module: {
@@ -24,7 +23,6 @@ switch (process.env.npm_lifecycle_event) {
   case 'release':
     config.plugins = [
       new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
-      new Compression({ test: /\.js$|\.map$/ }),
     ];
 
     config.entry = './src';

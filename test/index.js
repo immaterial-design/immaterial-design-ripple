@@ -21,6 +21,21 @@ const simulateLeftClick = (element) => {
     simulant.fire(element, simulant('mouseup'));
   }, 1000);
 };
+const simulateTouch = (element) => {
+  const { width, height, top, left } = element.getBoundingClientRect();
+  simulant.fire(element, simulant('touchstart', {
+    changedTouches: [
+      {
+        clientX: width / 2 + left,
+        clientY: height / 2 + top,
+      },
+    ],
+  }));
+
+  setTimeout(() => {
+    simulant.fire(element, simulant('touchend'));
+  }, 1000);
+};
 
 describe('ImdRipple', () => {
   it('クリック時にbegin,canvas破棄時にendイベントを発行する', (done) => {
@@ -29,6 +44,21 @@ describe('ImdRipple', () => {
 
     window.setTimeout(() => {
       simulateLeftClick(element);
+    });
+    ripple.once('begin', () => {
+      ripple.once('end', () => {
+        ripple.element.parentNode.removeChild(ripple.element);
+        done();
+      });
+    });
+  });
+
+  xit('(simulant issue)タッチ時にbegin,canvas破棄時にendイベントを発行する', (done) => {
+    const element = document.body.appendChild(createButton('THIS IS BUTTON'));
+    const ripple = new ImdRipple(element);
+
+    window.setTimeout(() => {
+      simulateTouch(element);
     });
     ripple.once('begin', () => {
       ripple.once('end', () => {
@@ -60,6 +90,7 @@ describe('ImdRipple', () => {
       return promise
       .then(() => ImdRipple.util.transparentize(canvas));
     });
+
     it('波形の粒の大きさの変更', () => {
       const options = { pixelSize: 3 };
       const promise = ImdRipple.play(25, 25, 50, 50, options);
@@ -70,6 +101,7 @@ describe('ImdRipple', () => {
       return promise
       .then(() => ImdRipple.util.transparentize(canvas));
     });
+
     it('波形をなめらかにする', () => {
       const options = { pixelSize: 1, bitCrash: 1 };
       const promise = ImdRipple.play(25, 25, 50, 50, options);
@@ -80,6 +112,7 @@ describe('ImdRipple', () => {
       return promise
       .then(() => ImdRipple.util.transparentize(canvas));
     });
+
     it('波形の色を変更する', () => {
       const options = { pixelSize: 1, bitCrash: 1, color: 'aliceblue' };
       const promise = ImdRipple.play(25, 25, 50, 50, options);
@@ -98,16 +131,34 @@ describe('ImdRipple', () => {
         ImdRipple.util.requestAnimationFrame(() => done());
       });
     });
+
     describe('.createContext2d', () => {
       it('指定した大きさのCanvasRenderingContext2Dを返す', () => {
         const width = 100;
         const height = 100;
         const { canvas } = ImdRipple.util.createContext2d(width, height);
 
-        assert.equal(canvas.width, width);
-        assert.equal(canvas.height, height);
+        assert(canvas.width === width);
+        assert(canvas.height === height);
       });
     });
+
+    describe('.promiseEvent', () => {
+      it('指定したイベントをpromiseで取得する', () => {
+        const element = createButton('THIS IS BUTTON');
+        const eventMock = { which: 1 };
+
+        setTimeout(() => {
+          simulant.fire(element, simulant('click', eventMock));
+        });
+
+        return ImdRipple.util.promiseEvent(element, 'click')
+        .then((event) => {
+          assert(event.which === eventMock.which);
+        });
+      });
+    });
+
     describe('.getImageData', () => {
       it('contextと同じ大きさの空のimageDataを返す', () => {
         const canvas = document.createElement('canvas');
@@ -121,6 +172,7 @@ describe('ImdRipple', () => {
         assert.deepEqual(lastPixel, [0, 0, 0, 0]);
       });
     });
+
     describe('.transparentize', () => {
       it('canvasを透明化、opacity:0でcanvasを破棄', () => {
         const canvas = document.createElement('canvas');
@@ -133,6 +185,7 @@ describe('ImdRipple', () => {
         });
       });
     });
+
     describe('.getTimingFunction', () => {
       it('関数かnullを返す', () => {
         assert(typeof ImdRipple.util.getTimingFunction('easeInOutExpo') === 'function');
@@ -141,7 +194,6 @@ describe('ImdRipple', () => {
       });
     });
 
-    // TODO: ピクセル長が大きすぎる場合、中心座標がずれる場合がある
     describe('.createRenderSchedule', () => {
       const createRenderSchedule = ImdRipple.util.createRenderSchedule;
 
@@ -156,6 +208,7 @@ describe('ImdRipple', () => {
         assert(schedule.pixelSize === 5);
         assert(schedule.easedBy === ImdRipple.util.getTimingFunction());
       });
+
       it('2x2 / 1 pixel = 2x2 data', () => {
         const schedule = createRenderSchedule(0, 0, 2, 2, { timingFunction: 'easeInOutExpo' });
 
@@ -168,6 +221,7 @@ describe('ImdRipple', () => {
         assert(schedule.easedBy === ImdRipple.util.getTimingFunction('easeInOutExpo'));
       });
     });
+
     describe('.getPixelColor', () => {
       it('指定したcolorNameのrgbaを返す', () => {
         const [r, g, b, a] = ImdRipple.util.getPixelColor('red');

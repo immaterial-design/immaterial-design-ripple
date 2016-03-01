@@ -9,9 +9,9 @@ export default class ImdRipple extends EventEmitter {
   /**
   * アニメーションで使用するユーティリティ関数群の参照
   *
-  * @property ImdRipple.util
   * @static
   * @public
+  * @property ImdRipple.util
   */
   static get util() {
     return util;
@@ -35,19 +35,19 @@ export default class ImdRipple extends EventEmitter {
   }
 
   /**
-  * 指定の要素のクリック時にアニメーションするイベントを追加
+  * 指定の要素のクリック時にアニメーションするイベントを追加する
   *
   * @class ImdRipple
   * @constructor
-  * @param {element} element - クリックイベントを監視する要素。アニメ時子要素としてCanvasを追加する
-  * @param {object} [options] - this.playの引数
+  * @param {Element} element - クリックイベントを監視する要素。アニメ時子要素としてCanvasを追加する
+  * @param {Object} [options] - this.playの引数
   */
   constructor(element, options = {}) {
     super();
 
     /**
-    * @property {HTMLElement} element
     * @public
+    * @property {HTMLElement} element
     */
     this.element = element;
 
@@ -58,90 +58,100 @@ export default class ImdRipple extends EventEmitter {
       this.element.style.position = 'relative';
     }
 
-    // TODO: タッチデバイス
-    element.addEventListener('mousedown', (event) => {
+    // mouseup／touchendでキャンバスの透明化を開始する
+    this.element.addEventListener('mousedown', (event) => {
       if (event.which !== 1) {// only left click
         return;
       }
 
-      const { left, top } = element.getBoundingClientRect();
+      const { left, top } = this.element.getBoundingClientRect();
       const x = Math.floor(event.clientX - left);
       const y = Math.floor(event.clientY - top);
 
-      const opts = objectAssign({
-        autoDestroy: false,
-      }, options);
-      const animation = this.play(x, y, opts);
-
-      this.emit('begin', animation.context);
-
-      // マウスキー押上でキャンバスの透明化を開始する
-      const destroy = () => {
-        element.removeEventListener('mouseup', destroy);
-
-        util.transparentize(animation.context.canvas, opts)
-        .then(() => animation.stop())
-        .then(() => {
-          this.emit('end', animation.context);
-        });
-      };
-      element.addEventListener('mouseup', destroy);
+      this.emit('begin');
+      this.play(x, y, objectAssign({ exitBefore: 'mouseup' }, options))
+      .then(() => {
+        this.emit('end');
+      });
     });
+
+    this.element.addEventListener('touchstart', (event) => {
+      const { left, top } = this.element.getBoundingClientRect();
+      const x = Math.floor(event.changedTouches[0].clientX - left);
+      const y = Math.floor(event.changedTouches[0].clientY - top);
+
+      this.emit('begin');
+      this.play(x, y, objectAssign({ exitBefore: 'touchend' }, options))
+      .then(() => {
+        this.emit('end');
+      });
+    });
+  }
+
+  /**
+  * this.elementに直接定義したオプションを返す
+  *
+  * @public
+  * @method getOptions
+  * @param {String} attrName 取得し、json5としてパースする属性名
+  * @return {Object} options オプション
+  */
+  getOptions(attrName = 'imd-options') {
+    return JSON5.parse(this.element.getAttribute(attrName) || '{}');
   }
 
   /**
   * コンストラクタの要素内で波形アニメーションを再生する
   *
-  * @method ImdRipple#play
   * @public
-  * @param {number} [x=auto] 波形アニメーションの始点x
-  * @param {number} [y=auto] 波形アニメーションの始点y
-  * @param {object} [options] ImdRipple.rippleの引数
+  * @method ImdRipple#play
+  * @param {Number} [x=auto] 波形アニメーションの始点x
+  * @param {Number} [y=auto] 波形アニメーションの始点y
+  * @param {Object} [options] ImdRipple.rippleで使用する引数
+  * @param {String|Bool} [options.exitBefore] canvasを破棄するタイミングの指定
   * @return {Promise} ImdRipple.play参照
   */
   play(x, y, options = {}) {
     const opts = objectAssign({
-      autoDestroy: true,
-    }, JSON5.parse(this.element.getAttribute('imd-options') || '{}'), options);
+      exitBefore: true, // auto
+    }, this.getOptions(), options);
 
     const { width, height } = this.element.getBoundingClientRect();
     const playX = x === undefined ? Math.floor(width / 2) : x;
     const playY = y === undefined ? Math.floor(height / 2) : y;
 
-    const promise = ImdRipple.play(playX, playY, width, height, opts);
-    const canvas = promise.context.canvas;
+    const animation = ImdRipple.play(playX, playY, width, height, opts);
 
-    promise
-    .then(() => {
-      this.emit('rendered');
+    this.element.appendChild(animation.context.canvas);
 
-      if (opts.autoDestroy) {
-        return util.transparentize(promise.context.canvas, opts)
-        .then(() => promise.stop())
-        .then(() => {
-          this.emit('end');
-        });
-      }
-      return promise.context;
-    });
+    let exit;
+    if (typeof opts.exitBefore === 'string') {
+      exit = util.promiseEvent(this.element, opts.exitBefore);
+    } else if (opts.exitBefore === true) {
+      exit = animation;// アニメーション終了時に事後処理
+    }
 
-    this.element.appendChild(canvas);
-
-    return promise;
+    return exit
+    .then(() => util.transparentize(animation.context.canvas, opts))
+    .then(() => animation.stop());
   }
 
   /**
   * CanvasRenderingContext2Dを作成して波形アニメーションを再生する
+  * 全てのピクセルの描写を終えるまでcanvasを更新し続ける
+  * キャンバスが大きいほど負荷が高いので、更新の必要がなければ停止する
+  * 全てのピクセルが描写した時か、promise.stopを実行した時に、fulfillする
   *
-  * @method ImdRipple.play
   * @static
-  * @param {number} x 波形アニメーションの始点x
-  * @param {number} y 波形アニメーションの始点y
-  * @param {number} width 波形アニメーションの幅
-  * @param {number} height 波形アニメーションの高さ
-  * @param {object} [options]
-  * @param {number} [options.pixelSize=height/15] ピクセル１粒の大きさ
-  * @return {Promise<CanvasRenderingContext2D>} animation このpromiseは独自の２プロパティを持つ
+  * @public
+  * @method ImdRipple.play
+  * @param {Number} x 波形アニメーションの始点x
+  * @param {Number} y 波形アニメーションの始点y
+  * @param {Number} width 波形アニメーションの幅
+  * @param {Number} height 波形アニメーションの高さ
+  * @param {Object} [options]
+  * @param {Number} [options.pixelSize=height/15] ピクセル１粒の大きさ
+  * @return {Promise<CanvasRenderingContext2D>} animation 独自の２プロパティを持つ
   */
   static play(x, y, width, height, options = {}) {
     const opts = objectAssign({
@@ -156,8 +166,6 @@ export default class ImdRipple extends EventEmitter {
     const [r, g, b, a] = util.getPixelColor(opts.color);
 
     const promise = new Promise((resolve) => {
-      // 全てのピクセルの描写を終えるまでcanvasを更新し続ける
-      // キャンバスが大きいほど負荷が高いので、更新の必要がなければ停止する
       let frame = 0;
       const render = () => {
         if (promise.disabled) {

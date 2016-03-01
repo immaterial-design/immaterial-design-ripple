@@ -1,10 +1,12 @@
 import Promise from 'bluebird';
 import easingJs from 'easing-js';
+import objectAssign from 'object-assign';
 
 /**
 * 利用可能な非同期関数でcallbackを実行する
 *
-* @params {function} [callback]
+* @function requestAnimationFrame
+* @param {Function} [callback]
 * @return undefined
 */
 export function requestAnimationFrame(callback) {
@@ -12,13 +14,32 @@ export function requestAnimationFrame(callback) {
 }
 
 /**
+* 指定した要素のイベントを待つプロミスを返す
+*
+* @function promiseEvent
+* @param {Element} target イベントを取得する要素
+* @param {String} eventName 取得するイベント名
+* @return {Promise<EventTarget>} deferredEvent 取得したイベント
+*/
+export function promiseEvent(target, eventName) {
+  return new Promise((resolve) => {
+    const onceListener = (event) => {
+      target.removeEventListener(eventName, onceListener);
+
+      resolve(event);
+    };
+    target.addEventListener(eventName, onceListener);
+  });
+}
+
+/**
 * 指定した大きさのcontext2dを返す
 *
 * @function createContext2d
-* @param {number} width contextの幅
-* @param {number} height contextの高さ
-* @param {object} [options]
-* @param {object} [options.pixelated=true] imageSmoothingEnabledをfalseに設定する
+* @param {Number} width contextの幅
+* @param {Number} height contextの高さ
+* @param {Object} [options]
+* @param {Object} [options.pixelated=true] アンチエイリアスを切る
 * @return {CanvasRenderingContext2D}
 */
 export function createContext2d(width, height, options = {}) {
@@ -62,20 +83,17 @@ export function getImageData(canvas) {
 /**
 * canvasを透明化、opacity:0でcanvasを破棄
 *
-* TODO: optionsで透明化の秒数が指定できるように
-*
 * @function transparentize
-* @param {element} element 透明化させ、破棄する要素
-* @param {object} [options]
-* @param {number} [options.opacityStep=0.02] 1フレームの透明化進行度
+* @param {Element} element 透明化させ、破棄する要素
+* @param {Object} [options]
+* @param {Number} [options.opacityStep=0.02] 1フレームの透明化進行度
 * @return {Promise<null>} animation 要素破棄時にfullfill
 */
 export function transparentize(element, options = {}) {
   const elementStyle = element.style;
-  const opts = Object.create(options);
-  if (opts.opacityStep === undefined) {
-    opts.opacityStep = 0.02;
-  }
+  const opts = objectAssign({
+    opacityStep: 0.02,
+  }, options);
 
   return new Promise((resolve) => {
     let opacity = 1;
@@ -104,8 +122,8 @@ export function transparentize(element, options = {}) {
 * それ以外はnull
 *
 * @function getTimingFunction
-* @param {string|function} name EasingJsの関数名か、独自で関数を定義
-* @return {function|null} timingFunction (t,b,c,d)を受け取るイージング関数。未定義の関数名ならnull
+* @param {String|Function} name EasingJsの関数名か、独自で関数を定義
+* @return {Function|null} timingFunction (t,b,c,d)を受け取るイージング関数。未定義の関数名ならnull
 */
 export function getTimingFunction(name = 'easeInBack') {
   if (typeof name === 'function') {
@@ -126,20 +144,20 @@ export function getTimingFunction(name = 'easeInBack') {
 * 返される配列の値は大きさからpixelSizeを割ったもの。
 *
 * @function createRenderSchedule
-* @param {number} x 波形アニメーションの始点x
-* @param {number} y 波形アニメーションの始点y
-* @param {number} width 波形アニメーションの幅
-* @param {number} height 波形アニメーションの高さ
-* @param {object} [options]
-* @param {number} [options.pixelSize] ピクセル１粒の大きさ
-* @param {number} [options.bitCrash=null] 境界にノイズを入れる、値はノイズの強さ
-* @param {string|function} [options.timingFunction='easeInQuint'] フレーム番号のイージング関数名
-* @return {object} RenderSchedule
-* @return {array} RenderSchedule.data yとxからなる二次元配列。表示するフレーム番号を値に持つ
-* @return {number} RenderSchedule.width ピクセルの横の個数
-* @return {number} RenderSchedule.height ピクセルの縦の個数
-* @return {number} RenderSchedule.pixelSize ピクセル１粒の大きさ
-* @return {function|null} RenderSchedule.easedBy フレーム番号の調整に使用した関数
+* @param {Number} x 波形アニメーションの始点x
+* @param {Number} y 波形アニメーションの始点y
+* @param {Number} width 波形アニメーションの幅
+* @param {Number} height 波形アニメーションの高さ
+* @param {Object} [options]
+* @param {Number} [options.pixelSize] ピクセル１粒の大きさ
+* @param {Number} [options.bitCrash=null] 境界にノイズを入れる、値はノイズの強さ
+* @param {String|Function} [options.timingFunction='easeInQuint'] フレーム番号のイージング関数名
+* @return {Object} RenderSchedule
+* @return {Array} RenderSchedule.data yとxからなる二次元配列。表示するフレーム番号を値に持つ
+* @return {Number} RenderSchedule.width ピクセルの横の個数
+* @return {Number} RenderSchedule.height ピクセルの縦の個数
+* @return {Number} RenderSchedule.pixelSize ピクセル１粒の大きさ
+* @return {Function|null} RenderSchedule.easedBy フレーム番号の調整に使用した関数
 */
 export function createRenderSchedule(x, y, width, height, options = {}) {
   const opts = Object.create(options);
