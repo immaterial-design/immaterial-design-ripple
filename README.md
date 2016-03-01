@@ -8,8 +8,11 @@ Immaterial Design Ripple (beta)
   <a href="https://travis-ci.org/immaterial-design/immaterial-design-ripple">
     <img src="http://img.shields.io/travis/immaterial-design/immaterial-design-ripple.svg?style=flat-square">
   </a>
-  <a href="https://coveralls.io/r/immaterial-design/immaterial-design-ripple?branch=master">
-    <img src="https://img.shields.io/coveralls/immaterial-design/immaterial-design-ripple/master.svg?style=flat-square">
+  <a href="https://codeclimate.com/github/immaterial-design/immaterial-design-ripple/coverage">
+    <img src="https://img.shields.io/codeclimate/github/immaterial-design/immaterial-design-ripple.svg?style=flat-square">
+  </a>
+  <a href="https://codeclimate.com/github/immaterial-design/immaterial-design-ripple">
+    <img src="https://img.shields.io/codeclimate/coverage/github/immaterial-design/immaterial-design-ripple.svg?style=flat-square">
   </a>
   <a href="https://npmcdn.com/immaterial-design-ripple@0.0.1/esdoc/index.html">
     <img src="https://npmcdn.com/immaterial-design-ripple@0.0.1/esdoc/badge.svg">
