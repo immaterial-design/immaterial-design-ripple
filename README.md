@@ -14,8 +14,8 @@ Immaterial Design Ripple (beta)
   <a href="https://codeclimate.com/github/immaterial-design/immaterial-design-ripple">
     <img src="https://img.shields.io/codeclimate/coverage/github/immaterial-design/immaterial-design-ripple.svg?style=flat-square">
   </a>
-  <a href="https://npmcdn.com/immaterial-design-ripple@0.0.1/esdoc/index.html">
-    <img src="https://npmcdn.com/immaterial-design-ripple@0.0.1/esdoc/badge.svg">
+  <a href="https://npmcdn.com/immaterial-design-ripple/esdoc/index.html">
+    <img src="https://npmcdn.com/immaterial-design-ripple/esdoc/badge.svg">
   </a>
 </p>
 
@@ -27,7 +27,7 @@ Immaterial Design Ripple (beta)
 
 > HTML5 Canvas based pixelated ripple effect.
 
-[See Example](https://npmcdn.com/immaterial-design-ripple@0.0.1/release/index.html)
+[See Example](https://npmcdn.com/immaterial-design-ripple/release/index.html)
 
 Installation
 ---
@@ -46,7 +46,7 @@ ImdRipple.bindOnLoad('.imd-ripple');
 ## At CDN
 
 ```html
-<script src="https://npmcdn.com/immaterial-design-ripple@0.0.1/release/immaterial-design-ripple.min.js"></script>
+<script src="https://npmcdn.com/immaterial-design-ripple/release/immaterial-design-ripple.min.js"></script>
 
 <button class="imd-ripple">Default effect</button>
 <script>ImdRipple.bindOnLoad('.imd-ripple')</script>
@@ -78,7 +78,7 @@ Becomes :+1:
 
 Document
 ---
-[API Reference(日本語)](https://npmcdn.com/immaterial-design-ripple@0.0.1/esdoc/index.html)
+[API Reference(日本語)](https://npmcdn.com/immaterial-design-ripple/esdoc/index.html)
 
 Test
 ---

@@ -1,6 +1,6 @@
 {
   "name": "immaterial-design-ripple",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "HTML5 Canvas based pixelated ripple effect",
   "scripts": {
     "start": "karma start",
