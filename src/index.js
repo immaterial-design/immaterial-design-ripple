@@ -126,7 +126,7 @@ export default class ImdRipple extends EventEmitter {
 
     let exit;
     if (typeof opts.exitBefore === 'string') {
-      exit = util.promiseEvent(this.element, opts.exitBefore);
+      exit = util.promiseEvent(window, opts.exitBefore);
     } else if (opts.exitBefore === true) {
       exit = animation;// アニメーション終了時に事後処理
     }
