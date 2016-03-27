@@ -1,7 +1,7 @@
-var path = require('path');
-var packageJson = require('./package');
+const path = require('path');
+const packageJson = require('./package');
 
-var init = {
+const init = {
   webpack: {
     module: {
       loaders: [
